@@ -12,6 +12,10 @@ const founderFilmPath = path.resolve(
   '../../assets/video/WhatsApp Video 2026-11-14 at 22.44.58.mp4',
 )
 
+/** GitHub project Pages: https://helo25-marce.github.io/yamoo-group/ */
+const pagesBase = '/yamoo-group/'
+const isGitHubPages = process.env.GITHUB_PAGES === 'true'
+
 function streamFounderFilm(request: IncomingMessage, response: ServerResponse) {
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     response.statusCode = 405
@@ -69,25 +73,47 @@ function streamFounderFilm(request: IncomingMessage, response: ServerResponse) {
 
 function founderFilmPlugin(): Plugin {
   const attach = (middlewares: Connect.Server) => {
+    // Dev/preview: keep legacy path and new static path.
     middlewares.use('/media/founder', (request, response) => {
+      streamFounderFilm(request, response)
+    })
+    middlewares.use('/media/founder.mp4', (request, response) => {
       streamFounderFilm(request, response)
     })
   }
 
   return {
     name: 'yamoo-founder-film',
-    apply: 'serve',
     configureServer(server) {
       attach(server.middlewares)
     },
     configurePreviewServer(server) {
       attach(server.middlewares)
     },
+    closeBundle() {
+      if (!fs.existsSync(founderFilmPath)) return
+      const outDir = path.resolve(appDir, 'dist/media')
+      fs.mkdirSync(outDir, { recursive: true })
+      fs.copyFileSync(founderFilmPath, path.join(outDir, 'founder.mp4'))
+    },
+  }
+}
+
+/** GitHub Pages SPA: unknown paths must serve index.html (copied as 404.html). */
+function spaFallbackPlugin(): Plugin {
+  return {
+    name: 'yamoo-spa-fallback',
+    closeBundle() {
+      const indexHtml = path.resolve(appDir, 'dist/index.html')
+      if (!fs.existsSync(indexHtml)) return
+      fs.copyFileSync(indexHtml, path.resolve(appDir, 'dist/404.html'))
+    },
   }
 }
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), founderFilmPlugin()],
+  base: isGitHubPages ? pagesBase : '/',
+  plugins: [react(), tailwindcss(), founderFilmPlugin(), spaFallbackPlugin()],
   server: {
     port: 5173,
     fs: {

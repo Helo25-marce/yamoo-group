@@ -1,13 +1,14 @@
+import { asset } from "../lib/asset"
 import type { DriveVehicle } from "./types"
 
 /** Fictional catalogue — demo rates only, not official YAMOO tariffs. */
 /** Distinct demo crops — replace with HQ fleet photography when available. */
 const fleet = {
-  berline: "/visuals/drive/vehicles/berline-executive.jpg",
-  suv: "/visuals/drive/vehicles/suv-confort.jpg",
-  van: "/visuals/drive/vehicles/van-familial.jpg",
-  prestige: "/visuals/drive/vehicles/prestige-noir.jpg",
-  suvBusiness: "/visuals/drive/vehicles/suv-affaires.jpg",
+  berline: asset("visuals/drive/vehicles/berline-executive.jpg"),
+  suv: asset("visuals/drive/vehicles/suv-confort.jpg"),
+  van: asset("visuals/drive/vehicles/van-familial.jpg"),
+  prestige: asset("visuals/drive/vehicles/prestige-noir.jpg"),
+  suvBusiness: asset("visuals/drive/vehicles/suv-affaires.jpg"),
 } as const
 
 export const DEMO_VEHICLES: DriveVehicle[] = [

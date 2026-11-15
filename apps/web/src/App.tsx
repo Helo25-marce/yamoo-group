@@ -22,9 +22,15 @@ function ScrollToTop() {
   return null
 }
 
+function routerBasename() {
+  const base = import.meta.env.BASE_URL || "/"
+  if (base === "/") return undefined
+  return base.replace(/\/$/, "") || undefined
+}
+
 export function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={routerBasename()}>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/fr" replace />} />

@@ -50,11 +50,11 @@ export function AboutPage() {
       {/* 2 — Notre histoire */}
       <section className="border-b border-ivory/10 bg-[#0b1628]">
         <div className="frame grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-16 lg:py-20">
-          <figure className="order-2 overflow-hidden rounded-[1.35rem] border border-ivory/10 bg-night lg:order-1">
+          <figure className="order-2 overflow-hidden rounded-[1.35rem] border border-ivory/10 bg-[#0b1628] lg:order-1">
             <img
               src={founderStills.alliance}
               alt={t("group.photoAlliance")}
-              className="aspect-[4/5] w-full object-cover object-[50%_18%] sm:aspect-[5/6]"
+              className="aspect-[4/5] w-full object-contain object-center sm:aspect-[5/6]"
               width={472}
               height={922}
             />
@@ -119,27 +119,27 @@ export function AboutPage() {
             <p className="mt-4 text-[0.95rem] leading-relaxed text-muted sm:text-base">{t("group.peopleBody")}</p>
           </div>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <figure className="overflow-hidden rounded-[1.25rem] border border-ivory/10 bg-night sm:col-span-2 lg:col-span-1">
+            <figure className="overflow-hidden rounded-[1.25rem] border border-ivory/10 bg-[#12081a] sm:col-span-2 lg:col-span-1">
               <img
                 src={founderStills.tabletBlue}
                 alt={t("group.photoTablet")}
-                className="aspect-[3/4] w-full object-cover object-[50%_20%]"
+                className="aspect-[3/4] w-full object-contain object-center"
               />
               <figcaption className="p-4 text-sm text-muted">{t("group.photoTabletCaption")}</figcaption>
             </figure>
-            <figure className="overflow-hidden rounded-[1.25rem] border border-ivory/10 bg-night">
+            <figure className="overflow-hidden rounded-[1.25rem] border border-ivory/10 bg-[#0b1628]">
               <img
                 src={founderStills.ceremonial}
                 alt={t("group.photoCeremonial")}
-                className="aspect-[3/4] w-full object-cover object-[50%_12%]"
+                className="aspect-[3/4] w-full object-contain object-center"
               />
               <figcaption className="p-4 text-sm text-muted">{t("group.photoCeremonialCaption")}</figcaption>
             </figure>
-            <figure className="overflow-hidden rounded-[1.25rem] border border-ivory/10 bg-night">
+            <figure className="overflow-hidden rounded-[1.25rem] border border-ivory/10 bg-[#0b1628]">
               <img
                 src={founderStills.studio}
                 alt={t("group.photoStudio")}
-                className="aspect-[3/4] w-full object-cover object-top"
+                className="aspect-[3/4] w-full object-contain object-center"
               />
               <figcaption className="p-4 text-sm text-muted">{t("group.photoStudioCaption")}</figcaption>
             </figure>

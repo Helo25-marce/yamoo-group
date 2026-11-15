@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Pause, Play, Volume2, VolumeX } from "lucide-react"
 
-const FILM_URL = "/media/founder"
+const FILM_URL = `${import.meta.env.BASE_URL}media/founder.mp4`
 /** Studio passage. The original file stays intact. Clip: 1:30 → 2:59. */
 const START_SECONDS = 90
 const END_SECONDS = 179
