@@ -1,18 +1,19 @@
 import { useMemo, useState } from "react"
 import { ArrowLeft, ArrowRight, Check, Clock } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router"
+import { Link, useSearchParams } from "react-router"
 import { cn } from "../lib/cn"
 import { localePath, useLocale } from "../lib/locale"
 import { VehicleCard } from "./VehicleCard"
 import { serviceNeedsRoute } from "./services"
-import { contactIssue, tripIssue } from "./validation"
+import { contactIssue } from "./validation"
 import { DriveAlert } from "./ui/DriveAlert"
 import { DriveButton } from "./ui/DriveButton"
 import { DriveDemoBanner } from "./ui/DriveDemoBanner"
 import { DriveStatusBadge } from "./ui/DriveStatusBadge"
 import { formatFcfa, whatsappDriveLink } from "./format"
 import { calculateDrivePrice } from "./pricing"
+import { criteriaIssue, listMatchingVehicles, resolveWizardEntry, toCriteria, vehicleFit } from "./search"
 import { createBooking, listVehicles } from "./store"
 import type { DriveBooking, DriveServiceKind, DriveVehicleCategory } from "./types"
 
@@ -44,18 +45,23 @@ type SortKey = "price-asc" | "price-desc" | "seats-desc"
 export function BookingWizard() {
   const { t } = useTranslation()
   const locale = useLocale()
-  const [step, setStep] = useState<Step>("service")
-  const [service, setService] = useState<DriveServiceKind | null>(null)
-  const [startAt, setStartAt] = useState(toLocalInput(defaultStart()))
+  const [params] = useSearchParams()
+  const entry = resolveWizardEntry(params, listVehicles())
+  const prefill = entry.kind === "prefill" ? entry : null
+  const [step, setStep] = useState<Step>(prefill?.step ?? "service")
+  const [service, setService] = useState<DriveServiceKind | null>(prefill?.service ?? null)
+  const [startAt, setStartAt] = useState(prefill ? prefill.startAt : toLocalInput(defaultStart()))
   const [endAt, setEndAt] = useState(() => {
+    if (prefill) return prefill.endAt
     const date = defaultStart()
     date.setDate(date.getDate() + 1)
     return toLocalInput(date)
   })
-  const [pickup, setPickup] = useState("")
-  const [dropoff, setDropoff] = useState("")
-  const [passengers, setPassengers] = useState(2)
-  const [vehicleId, setVehicleId] = useState<string | null>(null)
+  const [pickup, setPickup] = useState(prefill?.pickup ?? "")
+  const [dropoff, setDropoff] = useState(prefill?.dropoff ?? "")
+  const [passengers, setPassengers] = useState(prefill ? prefill.passengers : "2")
+  const [luggage, setLuggage] = useState(prefill ? prefill.luggage : "0")
+  const [vehicleId, setVehicleId] = useState<string | null>(prefill?.vehicleId ?? null)
   const [categoryFilter, setCategoryFilter] = useState<DriveVehicleCategory | "all">("all")
   const [sortKey, setSortKey] = useState<SortKey>("price-asc")
   const [vehicleQuery, setVehicleQuery] = useState("")
@@ -63,7 +69,7 @@ export function BookingWizard() {
   const [clientName, setClientName] = useState("")
   const [clientPhone, setClientPhone] = useState("")
   const [clientEmail, setClientEmail] = useState("")
-  const [error, setError] = useState("")
+  const [error, setError] = useState(prefill?.error ? t(prefill.error) : prefill?.warning ? t(prefill.warning) : "")
   const [busy, setBusy] = useState(false)
   const [booking, setBooking] = useState<DriveBooking | null>(null)
 
@@ -72,29 +78,35 @@ export function BookingWizard() {
   const stepIndex = steps.indexOf(step)
   const needsRoute = service ? serviceNeedsRoute(service) : false
 
-  const filteredVehicles = useMemo(() => {
-    const rate = (item: (typeof vehicles)[number]) =>
-      service === "chauffeur_daily" ? item.dailyRateFcfa : item.tripRateFcfa
-    const q = vehicleQuery.trim().toLowerCase()
+  const tripDraft = {
+    service: service ?? "",
+    startAt,
+    endAt: service === "chauffeur_daily" ? endAt : startAt,
+    pickup,
+    dropoff,
+    passengers,
+    luggage,
+  }
 
-    return vehicles
-      .filter((item) => (showUnavailable ? true : item.available))
-      .filter((item) => item.seats >= passengers)
-      .filter((item) => (categoryFilter === "all" ? true : item.category === categoryFilter))
-      .filter((item) => {
-        if (!q) return true
-        return (
-          item.name.toLowerCase().includes(q) ||
-          item.category.toLowerCase().includes(q) ||
-          t(`drive.category.${item.category}`).toLowerCase().includes(q)
-        )
-      })
-      .sort((a, b) => {
-        if (sortKey === "seats-desc") return b.seats - a.seats
-        if (sortKey === "price-desc") return rate(b) - rate(a)
-        return rate(a) - rate(b)
-      })
-  }, [vehicles, showUnavailable, passengers, categoryFilter, sortKey, service, vehicleQuery, t])
+  const filteredVehicles = useMemo(() => {
+    if (!service) return []
+    const criteria = toCriteria({
+      service,
+      startAt,
+      endAt: service === "chauffeur_daily" ? endAt : startAt,
+      pickup,
+      dropoff,
+      passengers,
+      luggage,
+    })
+    if (!criteria) return []
+    return listMatchingVehicles(
+      vehicles,
+      criteria,
+      { category: categoryFilter, query: vehicleQuery, showUnavailable, sort: sortKey },
+      (category) => t(`drive.category.${category}`),
+    )
+  }, [vehicles, showUnavailable, passengers, luggage, categoryFilter, sortKey, service, vehicleQuery, startAt, endAt, pickup, dropoff, t])
 
   const quote = useMemo(() => {
     if (!service || !vehicle) return null
@@ -111,7 +123,7 @@ export function BookingWizard() {
 
   function validateTrip() {
     if (!service) return false
-    const issue = tripIssue({ service, startAt, endAt, pickup, dropoff, passengers })
+    const issue = criteriaIssue(tripDraft)
     if (issue) {
       setError(t(issue))
       return false
@@ -129,7 +141,7 @@ export function BookingWizard() {
   }
 
   function confirm() {
-    if (!service || !vehicleId || !validateContact()) return
+    if (!service || !vehicleId || !validateTrip() || !validateContact()) return
     setBusy(true)
     setError("")
     try {
@@ -230,11 +242,9 @@ export function BookingWizard() {
               <label className="drive-field">
                 {t("drive.field.passengers")}
                 <input
-                  type="number"
-                  min={1}
-                  max={8}
+                  inputMode="numeric"
                   value={passengers}
-                  onChange={(event) => setPassengers(Number(event.target.value) || 1)}
+                  onChange={(event) => setPassengers(event.target.value)}
                 />
               </label>
             )}
@@ -252,11 +262,17 @@ export function BookingWizard() {
               <label className="drive-field">
                 {t("drive.field.passengers")}
                 <input
-                  type="number"
-                  min={1}
-                  max={8}
+                  inputMode="numeric"
                   value={passengers}
-                  onChange={(event) => setPassengers(Number(event.target.value) || 1)}
+                  onChange={(event) => setPassengers(event.target.value)}
+                />
+              </label>
+              <label className="drive-field">
+                {t("drive.field.luggage")}
+                <input
+                  inputMode="numeric"
+                  value={luggage}
+                  onChange={(event) => setLuggage(event.target.value)}
                 />
               </label>
             </div>
@@ -276,6 +292,14 @@ export function BookingWizard() {
                   value={dropoff}
                   onChange={(event) => setDropoff(event.target.value)}
                   placeholder={t("drive.field.dropoffPlaceholder")}
+                />
+              </label>
+              <label className="drive-field">
+                {t("drive.field.luggage")}
+                <input
+                  inputMode="numeric"
+                  value={luggage}
+                  onChange={(event) => setLuggage(event.target.value)}
                 />
               </label>
             </div>
@@ -305,7 +329,7 @@ export function BookingWizard() {
               <p className="mt-1 text-sm text-slate-600">{t("drive.demoPrices")}</p>
             </div>
             <p className="text-sm text-slate-500">
-              {filteredVehicles.length} {t("drive.results")}
+              {filteredVehicles.length} {t("drive.resultCount")}
             </p>
           </div>
 
@@ -320,13 +344,7 @@ export function BookingWizard() {
             </label>
             <label className="drive-field">
               {t("drive.field.passengers")}
-              <input
-                type="number"
-                min={1}
-                max={8}
-                value={passengers}
-                onChange={(event) => setPassengers(Number(event.target.value) || 1)}
-              />
+              <input inputMode="numeric" value={passengers} onChange={(event) => setPassengers(event.target.value)} />
             </label>
             <label className="drive-field">
               {t("drive.filter.sort")}
@@ -395,7 +413,24 @@ export function BookingWizard() {
               <ArrowLeft className="h-4 w-4" />
               {t("drive.back")}
             </button>
-            <DriveButton disabled={!vehicleId} onClick={() => vehicleId && go("contact")}>
+            <DriveButton
+              disabled={!vehicleId}
+              onClick={() => {
+                if (!service || !vehicleId || !validateTrip()) return
+                const chosen = vehicles.find((item) => item.id === vehicleId)
+                const criteria = toCriteria(tripDraft)
+                if (!chosen || !criteria) {
+                  setError(t(chosen ? "drive.err.incomplete" : "drive.err.vehicle"))
+                  return
+                }
+                const fit = vehicleFit(chosen, criteria)
+                if (fit) {
+                  setError(t(fit))
+                  return
+                }
+                go("contact")
+              }}
+            >
               {t("drive.next")}
               <ArrowRight className="h-4 w-4" />
             </DriveButton>
@@ -431,7 +466,7 @@ export function BookingWizard() {
               </p>
             ) : null}
             <p className="mt-1">
-              {passengers} {t("drive.seats")}
+              {passengers} {t("drive.seats")} · {luggage} {t("drive.luggage")}
             </p>
             {quote ? (
               <p className="mt-3 text-lg font-semibold text-slate-900">

@@ -6,6 +6,7 @@ import { DriveAccountPage } from "./pages/DriveAccountPage"
 import { DriveAdminPage } from "./pages/DriveAdminPage"
 import { DriveLoginPage } from "./pages/DriveLoginPage"
 import { DrivePage } from "./pages/DrivePage"
+import { DriveResultsPage } from "./pages/DriveResultsPage"
 import { AboutPage } from "./pages/AboutPage"
 import { HomePage } from "./pages/HomePage"
 import { InfoPage } from "./pages/InfoPage"
@@ -38,6 +39,7 @@ export function App() {
           <Route index element={<HomePage />} />
           <Route path="media" element={<MediaPage />} />
           <Route path="drive" element={<DrivePage />} />
+          <Route path="drive/resultats" element={<DriveResultsPage />} />
           <Route path="drive/connexion" element={<DriveLoginPage />} />
           <Route path="drive/compte" element={<DriveAccountPage />} />
           <Route path="drive/admin" element={<DriveAdminPage />} />

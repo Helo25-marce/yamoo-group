@@ -11,14 +11,31 @@ type Props = {
   selected: boolean
   locale: Locale
   onSelect: () => void
+  priceLabel?: string
+  priceUnit?: string
+  onCompare?: () => void
+  compareOn?: boolean
+  selectLabel?: string
 }
 
-export function VehicleCard({ vehicle, service, selected, locale, onSelect }: Props) {
+export function VehicleCard({
+  vehicle,
+  service,
+  selected,
+  locale,
+  onSelect,
+  priceLabel,
+  priceUnit,
+  onCompare,
+  compareOn = false,
+  selectLabel,
+}: Props) {
   const { t } = useTranslation()
   const price =
-    service === "chauffeur_daily"
+    priceLabel ??
+    (service === "chauffeur_daily"
       ? `${formatFcfa(vehicle.dailyRateFcfa, locale)} / ${t("drive.day")}`
-      : formatFcfa(vehicle.tripRateFcfa, locale)
+      : formatFcfa(vehicle.tripRateFcfa, locale))
 
   return (
     <article
@@ -65,8 +82,18 @@ export function VehicleCard({ vehicle, service, selected, locale, onSelect }: Pr
           </li>
         </ul>
         {vehicle.images?.some((image) => image.demo) ? <p className="drive-help">{t("drive.demoPhoto")}</p> : null}
-        <div className="flex items-end justify-between gap-3 border-t border-slate-100 pt-3">
-          <p className="text-lg font-semibold text-slate-900">{price}</p>
+        <p className="drive-help">{vehicle.available ? t("drive.catalogOn") : t("drive.catalogOff")}</p>
+        <div className="flex flex-wrap items-end justify-between gap-3 border-t border-slate-100 pt-3">
+          <p className="text-lg font-semibold text-slate-900">
+            {price}
+            {priceUnit ? <span className="ml-2 text-xs font-normal text-slate-500">{priceUnit}</span> : null}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {onCompare ? (
+              <button type="button" className={cn("drive-btn-secondary h-10 px-3 text-sm", compareOn && "is-selected")} onClick={onCompare}>
+                {compareOn ? t("drive.results.compared") : t("drive.results.compare")}
+              </button>
+            ) : null}
           <button
             type="button"
             disabled={!vehicle.available}
@@ -77,8 +104,9 @@ export function VehicleCard({ vehicle, service, selected, locale, onSelect }: Pr
               !vehicle.available && "cursor-not-allowed opacity-50",
             )}
           >
-            {!vehicle.available ? t("drive.unavailable") : selected ? t("drive.selected") : t("drive.selectVehicle")}
+            {!vehicle.available ? t("drive.unavailable") : selected ? t("drive.selected") : (selectLabel ?? t("drive.selectVehicle"))}
           </button>
+          </div>
         </div>
       </div>
     </article>

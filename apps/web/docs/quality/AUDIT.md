@@ -1,8 +1,8 @@
 # AUDIT qualité — YAMOO
 
-**Dernière mise à jour :** 2026-11-15 (LOT 1 Drive — fondations)  
-**Gate :** `npm run quality` — **PASS** (35 passed, 4 skipped volontaires)  
-**Détail du lot :** `DRIVE-LOT1.md`  
+**Dernière mise à jour :** 2026-11-15 (LOT 2 Drive — recherche et résultats)  
+**Gate :** `npm run quality` — **PASS** (38 passed, 7 skipped volontaires)  
+**Détail des lots :** `DRIVE-LOT1.md`, `DRIVE-LOT2.md`  
 **Règle :** un typecheck/build OK ne prouve pas qu’une page est belle.
 
 ---
@@ -13,7 +13,7 @@
 |---|---|
 | TypeScript / build | PASS |
 | Pricing Drive | PASS |
-| E2E institutionnel + Drive + i18n | PASS |
+| E2E institutionnel + Drive + i18n + résultats | PASS |
 | Captures auto (incl. `vehicles-*`) | Générées |
 | Inspection visuelle outil (session) | vehicles desktop + admin desktop **faites** |
 
@@ -35,6 +35,16 @@ Inchangé fonctionnellement. Tokens CSS `.ui-institutional` sur le layout.
 | Mention « visuel de démonstration » sur les cartes | Visible sur `vehicles-*` |
 | Admin et espace client | Non refondus (voulu) |
 | Port API / Django | Documenté, non codé |
+
+### C. YAMOO DRIVE — LOT 2
+
+| Élément | Statut |
+|---|---|
+| `/:lang/drive/resultats` | Implémenté. `/:lang/recherche` inchangée |
+| Filtres, tri, comparaison | Testés desktop et mobile |
+| Passage au wizard avec tarif recalculé | Testé. `price` d'URL ignoré. 255 000 FCFA |
+| `pricing.ts`, `status.ts`, `store.ts` | Non modifiés |
+| LOT 3, paiement, disponibilité temps réel | Non implémentés |
 
 ---
 
@@ -67,7 +77,8 @@ Inchangé fonctionnellement. Tokens CSS `.ui-institutional` sur le layout.
 - Remplacement photos par masters flotte officielle
 - Filtres admin sur jeu rempli (confirm/refuse end-to-end admin↔client)
 - WCAG / Lighthouse
-- Viewports 375, 1024 et 1280 : débordement seulement (captures `landing-w*`), pas un parcours complet
+- Viewports 375, 768, 1024 et 1280 de la page résultats : débordement et capture (`results-w*`), pas une ressaisie manuelle de chaque filtre
+- Script complet des résultats non rejoué sur le projet tablette (768 couvert par `results-w768.png`)
 - Contraste au-delà du bouton principal (pas d’audit WCAG complet)
 
 ---
@@ -101,3 +112,5 @@ Inchangé fonctionnellement. Tokens CSS `.ui-institutional` sur le layout.
 | 2026-11-15 | Protocole qualité + gate PASS initial |
 | 2026-11-15 | **Feu vert Drive** : photos distinctes, search bar, admin sidebar, tokens UI ; gate **33/33 PASS** ; inspection visuelle vehicles + admin |
 | 2026-11-15 | **LOT 1** sur `feature/drive-foundations` : tokens, 4 composants UI, validation extraite, images démo. Gate **35 passed / 4 skipped**. Non déployé. |
+| 2026-11-15 | **LOT 2** local, non commité : recherche, `/drive/resultats`, filtres, tri, comparaison, passage wizard. Gate **38 passed / 7 skipped**. Non poussé. |
+| 2026-11-15 | Clôture LOT 2 : un passager ou un bagage illisible n'est plus remplacé. Le comparateur défile dans son cadre à 375 et 390. |

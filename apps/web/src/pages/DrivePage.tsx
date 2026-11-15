@@ -23,7 +23,13 @@ export function DrivePage() {
               {t("drive.title")}
             </h1>
             <p className="text-sm leading-relaxed text-pretty text-ivory/85 sm:text-[0.95rem]">{t("drive.leadApp")}</p>
-            <div className="mt-1">
+            <div className="mt-1 flex flex-wrap gap-2">
+              <Link
+                to={localePath(locale, "/drive/resultats")}
+                className="inline-flex h-9 items-center rounded-full bg-white px-3.5 text-xs font-semibold text-[var(--color-night-elevated,#07172d)]"
+              >
+                {t("drive.results.openSearch")}
+              </Link>
               <Link
                 to={localePath(locale, "/drive/compte")}
                 className="inline-flex h-9 items-center rounded-full border border-ivory/30 px-3.5 text-xs font-semibold text-ivory transition hover:border-gold hover:text-gold"

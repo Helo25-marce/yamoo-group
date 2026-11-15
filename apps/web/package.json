@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.app.json --noEmit && vite build",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
-    "test:drive": "node src/drive/pricing.check.mjs",
+    "test:drive": "node src/drive/pricing.check.mjs && node src/drive/search.check.mjs",
     "test:e2e": "playwright test",
     "test:e2e:institutional": "playwright test e2e/institutional.spec.ts e2e/i18n.spec.ts",
     "test:e2e:drive": "playwright test e2e/drive.spec.ts",

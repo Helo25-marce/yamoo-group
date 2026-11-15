@@ -642,6 +642,101 @@ body {
   color: var(--drive-text, #07172d);
 }
 
+.drive-results {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.drive-results > * {
+  min-width: 0;
+}
+
+.ui-booking .drive-field {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .drive-results {
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.drive-filters {
+  display: none;
+  margin-top: 0.75rem;
+  border: 1px solid var(--drive-border, #d5dbe3);
+  border-radius: 1rem;
+  background: var(--drive-surface, #fff);
+  padding: 1rem;
+}
+
+.drive-filters.is-open {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .drive-filters {
+    display: block;
+    margin-top: 0;
+    position: sticky;
+    top: 5.5rem;
+  }
+}
+
+.drive-choice button {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.drive-btn-secondary.is-selected {
+  border-color: var(--drive-focus, #087d8d);
+  box-shadow: 0 0 0 3px rgb(8 125 141 / 0.16);
+}
+
+.drive-compare {
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid var(--drive-border, #d5dbe3);
+  border-radius: 1rem;
+  background: #fff;
+  padding: 1rem;
+}
+
+.drive-compare-scroll {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.drive-compare table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.drive-compare th,
+.drive-compare td {
+  min-width: 8.5rem;
+  border-bottom: 1px solid var(--drive-border, #d5dbe3);
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+
+.drive-compare th button {
+  display: block;
+  margin: 0.35rem 0 0;
+  min-height: 2.25rem;
+}
+
+.drive-compare tr.is-diff td {
+  background: #f3fbfc;
+}
+
 .drive-admin-shell {
   min-height: 100%;
   background: var(--ui-surface, #e8edf3);
