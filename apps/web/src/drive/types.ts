@@ -6,6 +6,12 @@ export type DriveVehicleCategory = "berline" | "suv" | "van" | "prestige"
 
 export type DriveRole = "client" | "admin" | null
 
+export type DriveVehicleImage = {
+  src: string
+  /** True while the file is a shared demonstration still, not a distinct fleet photo. */
+  demo: true
+}
+
 export type DriveVehicle = {
   id: string
   name: string
@@ -13,6 +19,8 @@ export type DriveVehicle = {
   seats: number
   luggage: number
   imageSrc: string
+  /** Optional gallery. Demo entries must stay marked demo. */
+  images?: DriveVehicleImage[]
   /** Optional object-position for framing the shared demo still. */
   imageFocus?: string
   available: boolean

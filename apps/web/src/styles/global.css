@@ -380,14 +380,32 @@ body {
 }
 
 .ui-booking {
-  --ui-surface: #eef1f5;
-  --ui-elevated: #ffffff;
-  --ui-text: #0f172a;
-  --ui-muted: #475569;
-  --ui-accent: #b8923a;
-  --ui-border: #cbd5e1;
-  --ui-focus-ring: 0 0 0 3px rgb(184 146 58 / 0.2);
-  --ui-panel-shadow: 0 18px 40px rgb(15 23 42 / 0.1);
+  --drive-bg: #f6f5f1;
+  --drive-surface: #ffffff;
+  --drive-surface-muted: #eef2f4;
+  --drive-text: #07172d;
+  --drive-text-muted: #3d4c5f;
+  --drive-border: #d5dbe3;
+  --drive-focus: #087d8d;
+  --drive-action: #07172d;
+  --drive-action-text: #ffffff;
+  --drive-success: #0f6b4c;
+  --drive-success-bg: #e7f6ef;
+  --drive-warning: #7a5410;
+  --drive-warning-bg: #fbf6ea;
+  --drive-danger: #9f1239;
+  --drive-danger-bg: #fdecee;
+  --drive-disabled: #94a3b8;
+  --drive-gold: #d9a441;
+  --drive-night: #07172d;
+  --ui-surface: var(--drive-bg);
+  --ui-elevated: var(--drive-surface);
+  --ui-text: var(--drive-text);
+  --ui-muted: var(--drive-text-muted);
+  --ui-accent: var(--drive-focus);
+  --ui-border: var(--drive-border);
+  --ui-focus-ring: 0 0 0 3px rgb(8 125 141 / 0.28);
+  --ui-panel-shadow: 0 18px 40px rgb(7 23 45 / 0.08);
 }
 
 .ui-admin {
@@ -517,6 +535,111 @@ body {
 .drive-btn-secondary:disabled {
   opacity: 0.45;
   pointer-events: none;
+}
+
+.ui-booking .drive-field {
+  font-size: 0.9375rem;
+  color: var(--drive-text);
+}
+
+.drive-title-section {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.25;
+  color: var(--drive-text, #07172d);
+}
+
+.drive-body {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--drive-text-muted, #3d4c5f);
+}
+
+.drive-help {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--drive-text-muted, #3d4c5f);
+}
+
+.drive-btn-primary {
+  display: inline-flex;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--drive-action, #07172d);
+  padding: 0 1.15rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--drive-action-text, #fff);
+}
+
+.drive-btn-primary:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.drive-choice,
+.drive-chip,
+.drive-step {
+  border: 1px solid var(--drive-border, #d5dbe3);
+  background: var(--drive-surface, #fff);
+  color: var(--drive-text, #07172d);
+}
+
+.drive-choice.is-selected,
+.drive-chip.is-selected,
+.drive-step.is-active {
+  border-color: var(--drive-focus, #087d8d);
+  background: #f3fbfc;
+  box-shadow: 0 0 0 3px rgb(8 125 141 / 0.16);
+}
+
+.drive-step.is-done {
+  border-color: #b7e4d2;
+  background: var(--drive-success-bg, #e7f6ef);
+  color: var(--drive-success, #0f6b4c);
+}
+
+.drive-text-link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--drive-focus, #087d8d);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.drive-demo-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  align-items: center;
+  border: 1px solid #ead7a4;
+  border-radius: 0.85rem;
+  background: var(--drive-warning-bg, #fbf6ea);
+  padding: 0.55rem 0.8rem;
+}
+
+.drive-alert {
+  border: 1px solid #fecdd3;
+  border-radius: 0.85rem;
+  background: var(--drive-danger-bg, #fdecee);
+  padding: 0.55rem 0.8rem;
+  font-size: 0.875rem;
+  color: var(--drive-danger, #9f1239);
+}
+
+.drive-status {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--drive-surface-muted, #eef2f4);
+  padding: 0.2rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--drive-text, #07172d);
 }
 
 .drive-admin-shell {

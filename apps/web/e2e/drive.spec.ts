@@ -83,4 +83,115 @@ test.describe("Drive — booking UI", () => {
     await assertNoHorizontalOverflow(page)
     await captureProof(page, "drive", `admin-${testInfo.project.name}`)
   })
+
+  test("store existant yamoo.drive.v1 : réservation et tarif conservés", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop-1440", "une session suffit")
+    const existing = {
+      version: 1,
+      vehicles: [
+        {
+          id: "veh-berline-1",
+          name: "Tarif conserve",
+          category: "berline",
+          seats: 3,
+          luggage: 2,
+          imageSrc: "/visuals/drive/vehicles/berline-executive.jpg",
+          available: true,
+          dailyRateFcfa: 123456,
+          tripRateFcfa: 25000,
+          demo: true,
+        },
+      ],
+      bookings: [
+        {
+          id: "bk-keep",
+          reference: "YD-KEEP",
+          status: "pending",
+          service: "chauffeur_now",
+          vehicleId: "veh-berline-1",
+          vehicleName: "Tarif conserve",
+          startAt: "2026-11-20T10:00:00.000Z",
+          endAt: "2026-11-20T10:00:00.000Z",
+          durationDays: 1,
+          pickup: "Douala",
+          dropoff: "Aeroport",
+          clientName: "Client Existant",
+          clientPhone: "+237600000001",
+          clientEmail: "keep@yamoo.demo",
+          priceFcfa: 25000,
+          currency: "FCFA",
+          demo: true,
+          createdAt: "2026-11-01T00:00:00.000Z",
+          updatedAt: "2026-11-01T00:00:00.000Z",
+        },
+      ],
+      notifications: [],
+      session: { role: "client", email: "keep@yamoo.demo", name: "Client Existant", demo: true },
+    }
+    await page.addInitScript((raw) => {
+      localStorage.setItem("yamoo.drive.v1", raw)
+    }, JSON.stringify(existing))
+
+    await gotoFr(page, "/drive/compte")
+    await expect(page.getByText("YD-KEEP")).toBeVisible()
+    const stored = await page.evaluate(() => localStorage.getItem("yamoo.drive.v1") ?? "")
+    expect(stored).toContain("YD-KEEP")
+    expect(stored).toContain("123456")
+
+    await gotoFr(page, "/drive")
+    await page.getByRole("button", { name: /journée|daily/i }).click()
+    await page.getByRole("button", { name: /continuer|continue/i }).click()
+    await page.getByRole("button", { name: /véhicules|vehicles|browse/i }).click()
+    await expect(page.getByText("Tarif conserve")).toBeVisible()
+    await expect(page.getByText(/123[\s\u202f\u00a0]456/).first()).toBeVisible()
+    await expect(page.getByText(/visuel de démonstration|demonstration still/i).first()).toBeVisible()
+    const after = await page.evaluate(() => JSON.parse(localStorage.getItem("yamoo.drive.v1") || "{}"))
+    expect(after.bookings.some((item: { reference: string }) => item.reference === "YD-KEEP")).toBe(true)
+    expect(after.vehicles.find((item: { id: string }) => item.id === "veh-berline-1")?.dailyRateFcfa).toBe(123456)
+  })
+
+  test("focus, contraste et routes EN", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop-1440", "une session suffit")
+    await gotoFr(page, "/drive")
+    await page.getByRole("button", { name: /journée|daily/i }).click()
+    const next = page.getByRole("button", { name: /^continuer$|^continue$/i })
+    const colors = await next.evaluate((el) => {
+      const style = getComputedStyle(el)
+      return { background: style.backgroundColor, color: style.color }
+    })
+    expect(contrastRatio(colors.color, colors.background)).toBeGreaterThanOrEqual(4.5)
+    await next.focus()
+    await page.keyboard.press("Tab")
+    await page.keyboard.press("Shift+Tab")
+    await expect(next).toBeFocused()
+    const outline = await next.evaluate((el) => getComputedStyle(el).outlineStyle)
+    expect(outline).not.toBe("none")
+
+    await page.goto("/en/drive")
+    await expect(page.getByText(/demonstration/i).first()).toBeVisible()
+    await expect(page).toHaveURL(/\/en\/drive/)
+    await assertNoHorizontalOverflow(page)
+
+    for (const width of [375, 1024, 1280]) {
+      await page.setViewportSize({ width, height: 900 })
+      await page.goto("/fr/drive")
+      await assertNoHorizontalOverflow(page)
+      await captureProof(page, "drive", `landing-w${width}`)
+    }
+  })
 })
+
+function contrastRatio(foreground: string, background: string) {
+  const lum = (color: string) => {
+    const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
+    if (!match) return 0
+    const channels = [match[1], match[2], match[3]].map((channel) => {
+      const value = Number(channel) / 255
+      return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
+    })
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+  }
+  const lighter = Math.max(lum(foreground), lum(background))
+  const darker = Math.min(lum(foreground), lum(background))
+  return (lighter + 0.05) / (darker + 0.05)
+}
