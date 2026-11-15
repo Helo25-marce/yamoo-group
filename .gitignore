@@ -1,0 +1,95 @@
+# ——— Dependencies ———
+node_modules/
+.pnp
+.pnp.js
+
+# ——— Build / caches (Vite, React, TS) ———
+dist/
+dist-ssr/
+build/
+.vite/
+.turbo/
+*.tsbuildinfo
+*.local
+
+# ——— Env & secrets (never commit) ———
+.env
+.env.*
+!.env.example
+!.env*.example
+*.pem
+*.p12
+*.pfx
+*.key
+id_rsa
+id_rsa.pub
+*.secret
+credentials.json
+service-account*.json
+secrets/
+
+# ——— Logs & OS ———
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ——— IDE / editors ———
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+*.swp
+*.swo
+
+# ——— Tests / coverage / Playwright ———
+coverage/
+apps/web/test-results/
+apps/web/playwright-report/
+apps/web/blob-report/
+apps/web/.playwright/
+playwright/.cache/
+
+# Auto-generated QA evidence (keep AUDIT.md / README.md)
+apps/web/docs/quality/screenshots/
+apps/web/docs/quality/reports/
+apps/web/docs/drive-qa/
+apps/web/qa/
+
+# Local draft screenshots (not app runtime assets)
+assets/photos/
+
+# ——— Django / Python (futur backend) ———
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+ENV/
+.python-version
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+celerybeat-schedule
+local_settings.py
+
+# ——— Misc temp / personal drafts ———
+*.tmp
+*.temp
+*.bak
+*.orig
+.cache/
+tmp/
+temp/

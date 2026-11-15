@@ -1,0 +1,17 @@
+{
+  "name": "yamoo",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @yamoo/web",
+    "build": "npm run build --workspace @yamoo/web",
+    "typecheck": "npm run typecheck --workspace @yamoo/web",
+    "quality": "npm run quality --workspace @yamoo/web",
+    "test:e2e": "npm run test:e2e --workspace @yamoo/web"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
