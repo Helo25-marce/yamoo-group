@@ -1,7 +1,8 @@
 # AUDIT qualité — YAMOO
 
-**Dernière mise à jour :** 2026-11-15 (itération Drive — feu vert structure)  
-**Gate :** `npm run quality` — **PASS** (33/33 e2e)  
+**Dernière mise à jour :** 2026-11-15 (LOT 2.5 Drive — catalogue à l'ouverture, non commité)  
+**Gate :** `npm run quality` — **PASS** (40 passed, 8 skipped volontaires)  
+**Détail des lots :** `DRIVE-LOT1.md`, `DRIVE-LOT2.md`, `DRIVE-LOT25.md`, `DRIVE-LOT3.md`  
 **Règle :** un typecheck/build OK ne prouve pas qu’une page est belle.
 
 ---
@@ -12,7 +13,7 @@
 |---|---|
 | TypeScript / build | PASS |
 | Pricing Drive | PASS |
-| E2E institutionnel + Drive + i18n | PASS |
+| E2E institutionnel + Drive + i18n + résultats | PASS |
 | Captures auto (incl. `vehicles-*`) | Générées |
 | Inspection visuelle outil (session) | vehicles desktop + admin desktop **faites** |
 
@@ -24,15 +25,26 @@
 
 Inchangé fonctionnellement. Tokens CSS `.ui-institutional` sur le layout.
 
-### B. YAMOO DRIVE — métier (cette itération)
+### B. YAMOO DRIVE — LOT 1
 
 | Élément | Statut |
 |---|---|
-| Photos catalogue distinctes (`/visuals/drive/vehicles/*`) | OK automatisé + inspecté |
-| Barre recherche style booking (query / passagers / tri) | OK |
-| Admin sidebar + table densifiée + panneau détail | OK inspecté |
-| Tokens `.ui-booking` / `.ui-admin` | OK |
-| Parcours métier (prix, statuts, localStorage) | Non cassé — e2e PASS |
+| Tokens sémantiques `.ui-booking` (turquoise / nuit, doré non dominant) | Implémenté, captures inspectées |
+| Wizard inchangé dans son ordre, ses prix et ses statuts | Testé (parcours + alerte + pricing) |
+| Store `yamoo.drive.v1` déjà rempli | Testé (YD-KEEP + tarif 123456 conservés) |
+| Mention « visuel de démonstration » sur les cartes | Visible sur `vehicles-*` |
+| Admin et espace client | Non refondus (voulu) |
+| Port API / Django | Documenté, non codé |
+
+### C. YAMOO DRIVE — LOT 2
+
+| Élément | Statut |
+|---|---|
+| `/:lang/drive/resultats` | Implémenté. `/:lang/recherche` inchangée |
+| Filtres, tri, comparaison | Testés desktop et mobile |
+| Passage au wizard avec tarif recalculé | Testé. `price` d'URL ignoré. 255 000 FCFA |
+| `pricing.ts`, `status.ts`, `store.ts` | Non modifiés |
+| LOT 3, paiement, disponibilité temps réel | Non implémentés |
 
 ---
 
@@ -54,6 +66,9 @@ Inchangé fonctionnellement. Tokens CSS `.ui-institutional` sur le layout.
 | Q-03 | Drive admin | Auth navigateur uniquement — pas une sécurité prod | Haute (prod) |
 | Q-05 | Build | Bundle JS > 500 kB | Basse |
 | Q-01 | Accueil | Vidéo FounderFilm parfois en fallback headless | Moyenne |
+| Q-06 | Espace client | Thème nuit institutionnel, pas aligné sur le parcours clair | Basse (lot suivant) |
+| Q-07 | Admin | Accent doré et densité laissés tels quels au LOT 1 | Basse |
+| Q-08 | Captures | En-tête fixe parfois dupliqué sur screenshot pleine page | Outil, pas la page |
 
 ---
 
@@ -62,7 +77,9 @@ Inchangé fonctionnellement. Tokens CSS `.ui-institutional` sur le layout.
 - Remplacement photos par masters flotte officielle
 - Filtres admin sur jeu rempli (confirm/refuse end-to-end admin↔client)
 - WCAG / Lighthouse
-- Viewports hors 390 / 768 / 1440
+- Viewports 375, 768, 1024 et 1280 de la page résultats : débordement et capture (`results-w*`), pas une ressaisie manuelle de chaque filtre
+- Script complet des résultats non rejoué sur le projet tablette (768 couvert par `results-w768.png`)
+- Contraste au-delà du bouton principal (pas d’audit WCAG complet)
 
 ---
 
@@ -94,3 +111,8 @@ Inchangé fonctionnellement. Tokens CSS `.ui-institutional` sur le layout.
 |---|---|
 | 2026-11-15 | Protocole qualité + gate PASS initial |
 | 2026-11-15 | **Feu vert Drive** : photos distinctes, search bar, admin sidebar, tokens UI ; gate **33/33 PASS** ; inspection visuelle vehicles + admin |
+| 2026-11-15 | **LOT 1** sur `feature/drive-foundations` : tokens, 4 composants UI, validation extraite, images démo. Gate **35 passed / 4 skipped**. Non déployé. |
+| 2026-11-15 | **LOT 2** local, non commité : recherche, `/drive/resultats`, filtres, tri, comparaison, passage wizard. Gate **38 passed / 7 skipped**. Non poussé. |
+| 2026-11-15 | Clôture LOT 2 : un passager ou un bagage illisible n'est plus remplacé. Le comparateur défile dans son cadre à 375 et 390. |
+| 2026-11-15 | **LOT 3** local, non commité : fiche `/:lang/drive/vehicules/:vehicleId`, galerie démo, récapitulatif recalculé. Non poussé. |
+| 2026-11-15 | **LOT 2.5** local, non commité : `/drive` ouvre le catalogue. Le wizard est sur `/drive/reservation`. Gate **40 passed / 8 skipped**. Non poussé. |

@@ -1,0 +1,93 @@
+{
+  "travel/kribi": {
+    "file": "images/travel/kribi.jpg",
+    "title": "File:Cameroon banner Kribi beach with boats.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Cameroon_banner_Kribi_beach_with_boats.jpg",
+    "author": "Kribi.jpg: ymea derivative work: Jjtkk",
+    "license": "CC BY-SA 3.0"
+  },
+  "travel/buea": {
+    "file": "images/travel/buea.jpg",
+    "title": "File:Mount Cameroon from Tiko.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Mount_Cameroon_from_Tiko.jpg",
+    "author": "Amcaja",
+    "license": "CC BY-SA 3.0"
+  },
+  "travel/limbe": {
+    "file": "images/travel/limbe.jpg",
+    "title": "File:Seme beach limbe Cameroon.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Seme_beach_limbe_Cameroon.jpg",
+    "author": "Blaizo 237",
+    "license": "CC BY-SA 4.0"
+  },
+  "travel/bafoussam": {
+    "file": "images/travel/bafoussam.jpg",
+    "title": "File:ChefferieBandjoun fevrier1982.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:ChefferieBandjoun_fevrier1982.jpg",
+    "author": "The original uploader was Christian Muir at French Wikipedia.",
+    "license": "CC BY-SA 2.5"
+  },
+  "travel/garoua": {
+    "file": "images/travel/garoua.jpg",
+    "title": "File:L'abreuvoir des annimaux au parc national de la benoué au Cameroun 2.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:L%27abreuvoir_des_annimaux_au_parc_national_de_la_benou%C3%A9_au_Cameroun_2.jpg",
+    "author": "OUMAROU OB",
+    "license": "CC0"
+  },
+  "travel/douala": {
+    "file": "images/travel/douala.jpg",
+    "title": "File:Aéroport de Douala.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:A%C3%A9roport_de_Douala.jpg",
+    "author": "serieminou",
+    "license": "CC BY-SA 4.0"
+  },
+  "travel/yaounde": {
+    "file": "images/travel/yaounde.jpg",
+    "title": "File:Yaoundé.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Yaound%C3%A9.jpg",
+    "author": "Unknown authorUnknown author",
+    "license": "CC0"
+  },
+  "media/p1": {
+    "file": "images/media/p1.jpg",
+    "title": "File:Ducati 748 Studio.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Ducati_748_Studio.jpg",
+    "author": "Stefan Krause, Germany",
+    "license": "CC BY-SA 3.0"
+  },
+  "media/p2": {
+    "file": "images/media/p2.jpg",
+    "title": "File:Wedding Photojournalist Đoan Trang Anh Khoa (262473537).jpeg",
+    "source": "https://commons.wikimedia.org/wiki/File:Wedding_Photojournalist_%C4%90oan_Trang_Anh_Khoa_(262473537).jpeg",
+    "author": "Hugo Wedding",
+    "license": "CC0"
+  },
+  "media/p3": {
+    "file": "images/media/p3.jpg",
+    "title": "File:2016 Operator kamery w czasie pracy.JPG",
+    "source": "https://commons.wikimedia.org/wiki/File:2016_Operator_kamery_w_czasie_pracy.JPG",
+    "author": "Jacek Halicki",
+    "license": "CC BY-SA 4.0"
+  },
+  "media/p5": {
+    "file": "images/media/p5.jpg",
+    "title": "File:Projection Mapping.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Projection_Mapping.jpg",
+    "author": "Toorumer",
+    "license": "CC BY-SA 4.0"
+  },
+  "media/p6": {
+    "file": "images/media/p6.jpg",
+    "title": "File:AUN Students in Graduation Gowns.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:AUN_Students_in_Graduation_Gowns.jpg",
+    "author": "Thepresido",
+    "license": "CC BY-SA 4.0"
+  },
+  "media/p7": {
+    "file": "images/media/p7.jpg",
+    "title": "File:Graphic design studio Mountain Top University Nigeria.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Graphic_design_studio_Mountain_Top_University_Nigeria.jpg",
+    "author": "Haykinz001",
+    "license": "CC BY-SA 4.0"
+  }
+}

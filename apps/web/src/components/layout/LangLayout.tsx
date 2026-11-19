@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { Navigate, Outlet, useLocation, useParams } from "react-router"
+import { CookieNotice } from "../CookieNotice"
 import { Footer } from "./Footer"
 import { Header } from "./Header"
 import { isLocale } from "../../lib/locale"
@@ -36,6 +37,7 @@ export function LangLayout() {
         <Outlet />
       </main>
       <Footer />
+      <CookieNotice />
     </div>
   )
 }

@@ -12,7 +12,7 @@ export function DriveLoginPage() {
   const locale = useLocale()
   const navigate = useNavigate()
   const [params] = useSearchParams()
-  const next = params.get("next") === "admin" ? "admin" : "compte"
+  const next = params.get("next") === "admin" ? "admin" : params.get("next") === "retour" ? "retour" : "compte"
   const [email, setEmail] = useState(next === "admin" ? DEMO_ADMIN.email : DEMO_CLIENT.email)
   const [password, setPassword] = useState("demo")
   const [error, setError] = useState("")
@@ -34,6 +34,11 @@ export function DriveLoginPage() {
         ? { role: "admin", email: DEMO_ADMIN.email, name: DEMO_ADMIN.name, demo: true }
         : { role: "client", email: DEMO_CLIENT.email, name: DEMO_CLIENT.name, demo: true },
     )
+    const back = sessionStorage.getItem("yamoo.drive.return")
+    if (next === "retour" && back?.startsWith("/")) {
+      navigate(back)
+      return
+    }
     navigate(localePath(locale, admin && next === "admin" ? "/drive/admin" : "/drive/compte"))
   }
 

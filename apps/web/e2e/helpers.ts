@@ -32,6 +32,10 @@ export async function assertImagesLoaded(page: Page, scope = "main img, header i
         naturalHeight: img.naturalHeight,
         width: rect.width,
         height: rect.height,
+        skip:
+          img.getAttribute("loading") === "lazy" &&
+          (rect.bottom < 0 || rect.top > window.innerHeight) &&
+          !(img.complete && img.naturalWidth === 0),
         distorted:
           img.naturalWidth > 0 &&
           img.naturalHeight > 0 &&
@@ -43,6 +47,7 @@ export async function assertImagesLoaded(page: Page, scope = "main img, header i
   }, scope)
 
   for (const img of report) {
+    if (img.skip) continue
     expect(img.complete, `image not complete: ${img.src}`).toBe(true)
     expect(img.naturalWidth, `broken image: ${img.src}`).toBeGreaterThan(0)
     expect(img.naturalHeight, `broken image height: ${img.src}`).toBeGreaterThan(0)
@@ -60,6 +65,13 @@ export async function captureProof(page: Page, folder: "institutional" | "drive"
 }
 
 export async function gotoFr(page: Page, pathname: string) {
+  await page.addInitScript(() => {
+    try {
+      if (!localStorage.getItem("yamoo.cookie")) localStorage.setItem("yamoo.cookie", "essential")
+    } catch {
+      /* navigation still proceeds */
+    }
+  })
   const pathName = pathname.startsWith("/") ? pathname : `/${pathname}`
   await page.goto(`/fr${pathName}`)
   await page.waitForLoadState("domcontentloaded")

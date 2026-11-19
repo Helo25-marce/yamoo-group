@@ -16,7 +16,7 @@ test.describe("i18n FR/EN coherence", () => {
 
   test("Drive FR/EN: badge démo présent", async ({ page }) => {
     await gotoFr(page, "/drive")
-    await expect(page.getByText(/démonstration|fictiv/i).first()).toBeVisible()
+    await expect(page.getByText(/démonstration|fictif/i).first()).toBeVisible()
 
     await page.goto("/en/drive")
     await page.waitForLoadState("domcontentloaded")
