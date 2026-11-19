@@ -3,7 +3,7 @@
 **Branche :** `feature/drive-foundations`  
 **Commit de départ :** `caf6289` (LOT 1, non poussé)  
 **Statut :** commit local de clôture. Non poussé, non fusionné, non déployé.  
-**LOT 3 :** non commencé.
+**LOT 3 :** implémenté localement, non commité. Voir `DRIVE-LOT3.md`.
 
 La page `/:lang/drive/resultats` cherche, filtre, trie et compare les cinq véhicules du catalogue. Elle transmet une sélection au wizard existant. Elle ne crée pas de réservation et ne confirme pas une disponibilité à une date.
 

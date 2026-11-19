@@ -1,3 +1,5 @@
+export const CONTACT_EMAIL = "heloisemarcellinepelagiekackka@gmail.com"
+
 export function formatFcfa(amount: number, locale: "fr" | "en" = "fr"): string {
   const formatted = new Intl.NumberFormat(locale === "fr" ? "fr-FR" : "en-US", {
     maximumFractionDigits: 0,
@@ -29,5 +31,5 @@ export function whatsappDriveLink(booking: {
     `Client : ${booking.clientName}`,
     `(Données de démonstration — non contractuel)`,
   ].join("\n")
-  return `https://wa.me/237600000000?text=${encodeURIComponent(text)}`
+  return `https://wa.me/33746546362?text=${encodeURIComponent(text)}`
 }

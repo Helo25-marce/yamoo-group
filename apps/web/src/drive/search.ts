@@ -1,3 +1,4 @@
+import { FACET_KEYS, matchesFacets, parseFacets, writeFacets, type FacetSelection } from "./filters"
 import { calculateDrivePrice } from "./pricing"
 import { tripIssue, type DriveIssue } from "./validation"
 import type { DriveServiceKind, DriveVehicle, DriveVehicleCategory } from "./types"
@@ -12,16 +13,20 @@ export const RESULT_KEYS = [
   "passengers",
   "luggage",
   "category",
+  "brand",
+  "provider",
+  "priceband",
   "q",
   "sort",
   "unavailable",
   "compare",
   "vehicle",
   "price",
+  ...FACET_KEYS,
 ] as const
 
-export const SORT_KEYS = ["price-asc", "price-desc", "seats-desc"] as const
-export const CATEGORY_FILTERS = ["all", "berline", "suv", "van", "prestige"] as const
+export const SORT_KEYS = ["recommended", "price-asc", "price-desc", "seats-desc"] as const
+export const CATEGORY_FILTERS = ["all", "berline", "suv", "van", "prestige", "pickup"] as const
 export const SERVICES = ["chauffeur_daily", "chauffeur_now", "chauffeur_later"] as const
 
 export type DriveSortKey = (typeof SORT_KEYS)[number]
@@ -41,6 +46,8 @@ export type DriveQueryError =
   | "drive.err.price"
   | "drive.err.compare"
   | "drive.err.query"
+  | "drive.err.filterPending"
+  | "drive.err.filterValue"
 
 export type DriveSearchDraft = {
   service: string
@@ -63,10 +70,21 @@ export type DriveSearchCriteria = {
 }
 
 export type DriveResultFilters = {
-  category: DriveCategoryFilter
+  /** "all" or a comma list of catalogue categories (OR). */
+  category: DriveCategoryFilter | (string & {})
   query: string
   showUnavailable: boolean
   sort: DriveSortKey
+  brand: string
+  /** Comma list of provider ids (OR). */
+  provider: string
+  priceBand: string
+  facets?: FacetSelection
+}
+
+export function listOf(value: string | undefined): string[] {
+  if (!value || value === "all") return []
+  return value.split(",").filter(Boolean)
 }
 
 export type DriveResultQuery = {
@@ -110,7 +128,7 @@ export function emptyDraft(): DriveSearchDraft {
 }
 
 export function defaultFilters(): DriveResultFilters {
-  return { category: "all", query: "", showUnavailable: false, sort: "price-asc" }
+  return { category: "all", query: "", showUnavailable: false, sort: "price-asc", brand: "", provider: "", priceBand: "", facets: {} }
 }
 
 export function isService(value: string): value is DriveServiceKind {
@@ -144,6 +162,28 @@ export function parseLocalDateTime(value: string): Date | null {
 function strictInt(value: string): number | null {
   if (!/^\d+$/.test(value.trim())) return null
   return Number(value.trim())
+}
+
+/** Seat and bag filters. Empty fields do not filter. Invalid text is kept and reported. */
+export function capacityFilter(draft: DriveSearchDraft): {
+  passengers: number | null
+  luggage: number | null
+  error: DriveQueryError | null
+} {
+  let error: DriveQueryError | null = null
+  let passengers: number | null = null
+  let luggage: number | null = null
+  if (draft.passengers.trim() !== "") {
+    const value = strictInt(draft.passengers)
+    if (value === null || value < 1 || value > 8) error = "drive.err.passengers"
+    else passengers = value
+  }
+  if (draft.luggage.trim() !== "") {
+    const value = strictInt(draft.luggage)
+    if (value === null || value < 0 || value > 12) error = error ?? "drive.err.luggage"
+    else luggage = value
+  }
+  return { passengers, luggage, error }
 }
 
 function duplicateError(params: URLSearchParams): DriveQueryError | null {
@@ -215,8 +255,9 @@ export function parseResults(params: URLSearchParams, vehicles: readonly DriveVe
   if (params.has("price")) warnings.push("drive.err.price")
 
   const categoryRaw = params.get("category")
-  if (categoryRaw === null || categoryRaw === "") filters.category = "all"
-  else if (isCategoryFilter(categoryRaw)) filters.category = categoryRaw
+  const categoryList = [...new Set((categoryRaw ?? "").split(",").filter(Boolean))]
+  if (categoryList.length === 0 || categoryRaw === "all") filters.category = "all"
+  else if (categoryList.every((item) => item !== "all" && isCategoryFilter(item))) filters.category = categoryList.join(",")
   else errors.push("drive.err.category")
 
   const sortRaw = params.get("sort")
@@ -233,6 +274,16 @@ export function parseResults(params: URLSearchParams, vehicles: readonly DriveVe
   if (query.length > MAX_QUERY) errors.push("drive.err.query")
   else filters.query = query
 
+  filters.brand = (params.get("brand") ?? "").slice(0, 40)
+  filters.provider = [...new Set((params.get("provider") ?? "").split(",").map((item) => item.slice(0, 40)).filter(Boolean))]
+    .slice(0, 12)
+    .join(",")
+  filters.priceBand = (params.get("priceband") ?? "").slice(0, 20)
+  const facets = parseFacets(params, vehicles)
+  filters.facets = facets.selection
+  if (facets.ignored.length > 0) warnings.push("drive.err.filterPending")
+  if (facets.invalid.length > 0) warnings.push("drive.err.filterValue")
+
   const compareRaw = params.get("compare") ?? ""
   const compare = compareRaw
     .split(",")
@@ -242,11 +293,14 @@ export function parseResults(params: URLSearchParams, vehicles: readonly DriveVe
   const known = new Set(vehicles.map((vehicle) => vehicle.id))
   if (uniqueCompare.length > 3 || uniqueCompare.some((id) => !known.has(id))) errors.push("drive.err.compare")
 
-  const searchTouched = ["service", "start", "end", "pickup", "dropoff", "passengers", "luggage"].some((key) => params.has(key))
-  const criteriaError = searchTouched || params.has("vehicle") ? criteriaIssue(draft) : null
-  if (!searchTouched && !params.has("vehicle") && errors.length === 0) {
-    return { draft, filters, compare: uniqueCompare, query: null, errors: [], warnings }
+  const tripTouched = ["service", "start", "end", "pickup", "dropoff", "vehicle"].some((key) => params.has(key))
+  if (!tripTouched) {
+    if (unavailableRaw === null || unavailableRaw === "") filters.showUnavailable = true
+    const capacity = capacityFilter(draft)
+    if (capacity.error) errors.push(capacity.error)
+    return { draft, filters, compare: uniqueCompare, query: null, errors, warnings }
   }
+  const criteriaError = criteriaIssue(draft)
   if (criteriaError) errors.push(criteriaError)
 
   const criteria = errors.length === 0 ? toCriteria(draft) : null
@@ -273,6 +327,10 @@ export function buildDraftSearch(draft: DriveSearchDraft, filters: DriveResultFi
   if (draft.passengers !== "") params.set("passengers", draft.passengers)
   if (draft.luggage !== "") params.set("luggage", draft.luggage)
   if (filters.category !== "all") params.set("category", filters.category)
+  if (filters.brand) params.set("brand", filters.brand)
+  if (filters.provider) params.set("provider", filters.provider)
+  if (filters.priceBand) params.set("priceband", filters.priceBand)
+  writeFacets(params, filters.facets)
   if (filters.query.trim()) params.set("q", filters.query.trim())
   if (filters.sort !== "price-asc") params.set("sort", filters.sort)
   if (filters.showUnavailable) params.set("unavailable", "1")
@@ -290,6 +348,10 @@ export function buildResultsSearch(query: DriveResultQuery): string {
   params.set("passengers", String(query.criteria.passengers))
   params.set("luggage", String(query.criteria.luggage))
   if (query.filters.category !== "all") params.set("category", query.filters.category)
+  if (query.filters.brand) params.set("brand", query.filters.brand)
+  if (query.filters.provider) params.set("provider", query.filters.provider)
+  if (query.filters.priceBand) params.set("priceband", query.filters.priceBand)
+  writeFacets(params, query.filters.facets)
   if (query.filters.query.trim()) params.set("q", query.filters.query.trim())
   if (query.filters.sort !== "price-asc") params.set("sort", query.filters.sort)
   if (query.filters.showUnavailable) params.set("unavailable", "1")
@@ -325,28 +387,51 @@ export function vehicleFit(vehicle: DriveVehicle, criteria: DriveSearchCriteria)
   return null
 }
 
-export function listMatchingVehicles(
+export function priceBandOf(dailyRateFcfa: number): string {
+  if (dailyRateFcfa < 100_000) return "0-100"
+  if (dailyRateFcfa < 130_000) return "100-130"
+  if (dailyRateFcfa < 160_000) return "130-160"
+  return "160+"
+}
+
+export function listBrowseVehicles(
   vehicles: readonly DriveVehicle[],
-  criteria: DriveSearchCriteria,
   filters: DriveResultFilters,
+  capacity: { passengers: number | null; luggage: number | null },
+  criteria: DriveSearchCriteria | null,
   categoryLabel: (category: DriveVehicleCategory) => string,
 ): DriveVehicle[] {
   const needle = filters.query.trim().toLowerCase()
+  const categories = listOf(filters.category)
+  const providers = listOf(filters.provider)
   const ranked = vehicles
     .filter((vehicle) => (filters.showUnavailable ? true : vehicle.available))
-    .filter((vehicle) => vehicle.seats >= criteria.passengers)
-    .filter((vehicle) => vehicle.luggage >= criteria.luggage)
-    .filter((vehicle) => (filters.category === "all" ? true : vehicle.category === filters.category))
+    .filter((vehicle) => capacity.passengers === null || vehicle.seats >= capacity.passengers)
+    .filter((vehicle) => capacity.luggage === null || vehicle.luggage >= capacity.luggage)
+    .filter((vehicle) => categories.length === 0 || categories.includes(vehicle.category))
+    .filter((vehicle) => (filters.brand ? vehicle.brand === filters.brand : true))
+    .filter((vehicle) => providers.length === 0 || providers.some((id) => vehicle.partnerId === id || (vehicle.providerIds ?? []).includes(id)))
+    .filter((vehicle) => (filters.priceBand ? priceBandOf(vehicle.dailyRateFcfa) === filters.priceBand : true))
+    .filter((vehicle) => matchesFacets(vehicle, filters.facets))
     .filter((vehicle) => {
       if (!needle) return true
       const label = categoryLabel(vehicle.category).toLowerCase()
-      return vehicle.name.toLowerCase().includes(needle) || vehicle.category.includes(needle) || label.includes(needle)
+      const brand = (vehicle.brand ?? "").toLowerCase()
+      const model = (vehicle.model ?? "").toLowerCase()
+      return vehicle.name.toLowerCase().includes(needle) || vehicle.category.includes(needle) || label.includes(needle) || brand.includes(needle) || model.includes(needle)
     })
-    .map((vehicle) => ({ vehicle, price: vehicleQuote(criteria, vehicle).priceFcfa }))
+    .map((vehicle) => ({
+      vehicle,
+      price: criteria ? vehicleQuote(criteria, vehicle).priceFcfa : vehicle.dailyRateFcfa,
+    }))
 
   ranked.sort((left, right) => {
     let diff = 0
-    if (filters.sort === "seats-desc") diff = right.vehicle.seats - left.vehicle.seats
+    if (filters.sort === "recommended") {
+      const asked = capacity.passengers ?? 1
+      diff = Math.abs(left.vehicle.seats - asked) - Math.abs(right.vehicle.seats - asked)
+      if (diff === 0) diff = left.price - right.price
+    } else if (filters.sort === "seats-desc") diff = right.vehicle.seats - left.vehicle.seats
     else if (filters.sort === "price-desc") diff = right.price - left.price
     else diff = left.price - right.price
     if (diff !== 0) return diff
@@ -355,6 +440,21 @@ export function listMatchingVehicles(
     return 0
   })
   return ranked.map((item) => item.vehicle)
+}
+
+export function listMatchingVehicles(
+  vehicles: readonly DriveVehicle[],
+  criteria: DriveSearchCriteria,
+  filters: DriveResultFilters,
+  categoryLabel: (category: DriveVehicleCategory) => string,
+): DriveVehicle[] {
+  return listBrowseVehicles(
+    vehicles,
+    filters,
+    { passengers: criteria.passengers, luggage: criteria.luggage },
+    criteria,
+    categoryLabel,
+  )
 }
 
 const HANDOFF_KEYS = ["service", "start", "end", "pickup", "dropoff", "passengers", "luggage", "vehicle", "price"]

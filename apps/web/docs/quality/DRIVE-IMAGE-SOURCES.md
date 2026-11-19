@@ -1,0 +1,56 @@
+﻿# Sources des photos DRIVE
+
+Photos de modèles sous licence libre (Wikimedia Commons), et non des véhicules des prestataires. Catalogue haut de gamme régénéré par `scripts/luxury-catalog.mjs` ; les 50 photos ont été contrôlées visuellement sur une planche contact (vue extérieure, véhicule entier, sans livrée ni salon).
+
+| Modèle | Fichier | Source | Auteur | Licence | Attribution | Contrôle | Statut |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Mercedes-Benz E-Class | images/drive/vehicles/mercedes-benz-e-class.jpg | https://commons.wikimedia.org/wiki/File:MERCEDES-BENZ_E-CLASS_SEDAN_LWB_(V212)_China.jpg | Dinkun Chen | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| BMW Série 5 | images/drive/vehicles/bmw-serie-5.jpg | https://commons.wikimedia.org/wiki/File:BMW_5_SERIES_LWB_SEDAN_(BMW_G38)_China.jpg | Dinkun Chen | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Audi A6 | images/drive/vehicles/audi-a6.jpg | https://commons.wikimedia.org/wiki/File:Tuned_Audi_A6_SEDAN_(C8)_front.jpg | Tokumeigakarinoaoshima | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Lexus ES | images/drive/vehicles/lexus-es.jpg | https://commons.wikimedia.org/wiki/File:2025_Lexus_ES_300h_Sports_luxury_front.jpg | LuvsMG481 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Genesis G80 | images/drive/vehicles/genesis-g80.jpg | https://commons.wikimedia.org/wiki/File:2023_Genesis_G80_2.5T_Advanced_AWD_in_Capri_Blue,_Front_Left,_08-19-2023.jpg | Elise240SX | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Volvo S90 | images/drive/vehicles/volvo-s90.jpg | https://commons.wikimedia.org/wiki/File:Volvo_S90_T5_(front).jpg | メイド理世 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Jaguar XF | images/drive/vehicles/jaguar-xf.jpg | https://commons.wikimedia.org/wiki/File:Jaguar_XF_S_(X260)_front.jpg | Tokumeigakarinoaoshima | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Maserati Ghibli | images/drive/vehicles/maserati-ghibli.jpg | https://commons.wikimedia.org/wiki/File:Maserati_Ghibli_M157_front,_Dongguan,_China_30_April_2024.jpg | メイド理世 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Audi A7 Sportback | images/drive/vehicles/audi-a7.jpg | https://commons.wikimedia.org/wiki/File:Audi_A7_Sportback_55_TFSI_quattro_debut_package_(AAA-F2DLZS)_front.jpg | Tokumeigakarinoaoshima | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Mercedes-Benz CLS | images/drive/vehicles/mercedes-benz-cls.jpg | https://commons.wikimedia.org/wiki/File:Mercedes-Benz_CLS_220_d_Sports_(C257)_front.jpg | Tokumeigakarinoaoshima | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Land Rover Range Rover Sport | images/drive/vehicles/range-rover-sport.jpg | https://commons.wikimedia.org/wiki/File:Land_Rover_RANGE_ROVER_SPORT_DYNAMIC_HSE_D300_(L461)_front.jpg | Tokumeigakarinoaoshima | CC0 | non | contact-sheet | verified |
+| Toyota Land Cruiser 300 | images/drive/vehicles/toyota-land-cruiser-300.jpg | https://commons.wikimedia.org/wiki/File:2021_Toyota_Land_Cruiser_300_(Russia)_front_view.jpg | Авто Плюс Новости | CC BY 3.0 | oui | contact-sheet | verified |
+| Lexus GX | images/drive/vehicles/lexus-gx.jpg | https://commons.wikimedia.org/wiki/File:2016_Lexus_GX_460_(front).jpg | User3204 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Mercedes-Benz GLE | images/drive/vehicles/mercedes-benz-gle.jpg | https://commons.wikimedia.org/wiki/File:Mercedes-Benz_GLE-Klasse_(V167)_GLE_300_d_4MATIC_(2021)_(53327035420).jpg | Charles from Port Chester, New York | CC BY 2.0 | oui | contact-sheet | verified |
+| BMW X6 | images/drive/vehicles/bmw-x6.jpg | https://commons.wikimedia.org/wiki/File:BMW_X6_(front).jpg | Oleg Yunakov | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Porsche Macan | images/drive/vehicles/porsche-macan.jpg | https://commons.wikimedia.org/wiki/File:2020_Porsche_Macan_GTS_grey_front.jpg | Throwawayacc222 | CC0 | non | contact-sheet | verified |
+| Volvo XC90 | images/drive/vehicles/volvo-xc90.jpg | https://commons.wikimedia.org/wiki/File:2017_Volvo_XC90_Momentum,_front_left_in_Silver_(Astoria).jpg | Mr.choppers | CC BY-SA 3.0 | oui | contact-sheet | verified |
+| Audi Q8 | images/drive/vehicles/audi-q8.jpg | https://commons.wikimedia.org/wiki/File:2018_Audi_Q8_Front_End.jpg | Vauxford | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| BMW X7 | images/drive/vehicles/bmw-x7.jpg | https://commons.wikimedia.org/wiki/File:BMW_X7_G07_M50i_Alpine_White_-_front.jpg | Ethan Llamas | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Mercedes-Benz GLS | images/drive/vehicles/mercedes-benz-gls.jpg | https://commons.wikimedia.org/wiki/File:2024_Mercedes-Benz_GLS_450d_4MATIC_front.jpg | LuvsMG481 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Cadillac Escalade | images/drive/vehicles/cadillac-escalade.jpg | https://commons.wikimedia.org/wiki/File:2021_Cadillac_Escalade_ESV_4WD_Premium_Luxury_in_Satin_Steel_Metallic,_front_right.jpg | Mr.choppers | CC BY-SA 3.0 | oui | contact-sheet | verified |
+| Lincoln Navigator | images/drive/vehicles/lincoln-navigator.jpg | https://commons.wikimedia.org/wiki/File:2018_Lincoln_Navigator_Reserve,_front_left,_03-15-2024.jpg | MercurySable99 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Porsche Cayenne | images/drive/vehicles/porsche-cayenne.jpg | https://commons.wikimedia.org/wiki/File:Porsche_Cayenne_Macau_front_view_(July_14,_2025).jpg | 茅野ふたば | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Maserati Levante | images/drive/vehicles/maserati-levante.jpg | https://commons.wikimedia.org/wiki/File:Maserati_Levante_front_view_(April_6,_2025).jpg | 茅野ふたば | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Mercedes-Benz G-Class | images/drive/vehicles/mercedes-benz-g-class.jpg | https://commons.wikimedia.org/wiki/File:Mercedes-Benz_G500_(W463)_front.jpg | Tokumeigakarinoaoshima | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Mercedes-Benz S-Class | images/drive/vehicles/mercedes-benz-s-class.jpg | https://commons.wikimedia.org/wiki/File:MERCEDES-BENZ_S-CLASS_(W223)_China_(18).jpg | Dinkun Chen | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Mercedes-Maybach S-Class | images/drive/vehicles/mercedes-maybach-s-class.jpg | https://commons.wikimedia.org/wiki/File:Mercedes-Maybach_S-Class_(Z223)_001.jpg | Callum Gill | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Rolls-Royce Ghost | images/drive/vehicles/rolls-royce-ghost.jpg | https://commons.wikimedia.org/wiki/File:Rolls-Royce_Ghost_HCC21.jpg | MrWalkr | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| BMW Série 7 | images/drive/vehicles/bmw-serie-7.jpg | https://commons.wikimedia.org/wiki/File:BMW_7_SERIES_(G70)_China_(resized).jpg | Dinkun Chen | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Bentley Flying Spur | images/drive/vehicles/bentley-flying-spur.jpg | https://commons.wikimedia.org/wiki/File:2019_Bentley_Flying_Spur_W12_Front.jpg | Vauxford | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Rolls-Royce Cullinan | images/drive/vehicles/rolls-royce-cullinan.jpg | https://commons.wikimedia.org/wiki/File:Rolls_Royce_Cullinan_(front).jpg | Mathious Ier | CC0 | non | contact-sheet | verified |
+| Audi A8 | images/drive/vehicles/audi-a8.jpg | https://commons.wikimedia.org/wiki/File:Audi_A8_D4.jpg | Joe Ravi | CC BY-SA 3.0 | oui | filename-and-license | verified |
+| Bentley Bentayga | images/drive/vehicles/bentley-bentayga.jpg | https://commons.wikimedia.org/wiki/File:Bentley_Bentayga_2015_-_front.jpg | DeFacto | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Lexus LX 600 | images/drive/vehicles/lexus-lx-600.jpg | https://commons.wikimedia.org/wiki/File:Lexus_LX_600_F_Sport_2022_(1).jpg | Ethan Llamas | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Land Rover Range Rover Autobiography | images/drive/vehicles/range-rover-autobiography.jpg | https://commons.wikimedia.org/wiki/File:Land_Rover_Range_Rover_Autobiography_2016.jpg | DeFacto | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Mercedes-Benz V-Class | images/drive/vehicles/mercedes-benz-v-class.jpg | https://commons.wikimedia.org/wiki/File:MERCEDES_BENZ_V-CLASS_(W447)_China.jpg | Dinkun Chen | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Lexus LM | images/drive/vehicles/lexus-lm.jpg | https://commons.wikimedia.org/wiki/File:Lexus_LM_300h_(AYH36)_front.jpg | Tokumeigakarinoaoshima | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Toyota Alphard | images/drive/vehicles/toyota-alphard.jpg | https://commons.wikimedia.org/wiki/File:2004_Toyota_Alphard_V_2.4_Front.jpg | Vauxford | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Toyota Vellfire | images/drive/vehicles/toyota-vellfire.jpg | https://commons.wikimedia.org/wiki/File:Toyota_Vellfire,_Johor_Bahru_(P1110137).jpg | Matti Blume | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Hyundai Staria Lounge | images/drive/vehicles/hyundai-staria.jpg | https://commons.wikimedia.org/wiki/File:Hyundai_Staria_1X7A0326.jpg | Alexander Migl | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Kia Carnival | images/drive/vehicles/kia-carnival.jpg | https://commons.wikimedia.org/wiki/File:2018_Kia_Carnival_(YP_MY19)_S_van_(2018-10-01)_01.jpg | EurovisionNim | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Volkswagen Multivan | images/drive/vehicles/volkswagen-multivan.jpg | https://commons.wikimedia.org/wiki/File:VW_Multivan_eHybrid,_IAA_2021,_Munich_(IAA10413).jpg | Matti Blume | CC BY-SA 4.0 | oui | filename-and-license | verified |
+| Mercedes-Benz EQV | images/drive/vehicles/mercedes-benz-eqv.jpg | https://commons.wikimedia.org/wiki/File:2024_Mercedes-Benz_EQV_DSC_7337.jpg | Alexander Migl | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Zeekr 009 | images/drive/vehicles/zeekr-009.jpg | https://commons.wikimedia.org/wiki/File:2025_Zeekr_009_green_front.jpg | Danjer | CC BY 4.0 | oui | contact-sheet | verified |
+| Chrysler Pacifica | images/drive/vehicles/chrysler-pacifica.jpg | https://commons.wikimedia.org/wiki/File:2017_Chrysler_Pacifica_Limited,_front_12.21.19.jpg | Kevauto | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Ford F-150 Raptor | images/drive/vehicles/ford-f150-raptor.jpg | https://commons.wikimedia.org/wiki/File:2010_Ford_F-150_SVT_Raptor_SuperCab,_front_left,_04-04-2023.jpg | MercurySable99 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Ram 1500 TRX | images/drive/vehicles/ram-1500-trx.jpg | https://commons.wikimedia.org/wiki/File:2023_Ram_1500_TRX_Havoc_Edition_in_Baja_Yellow_Clearcoat,_Front_Left,_04-30-2023.jpg | Elise240SX | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Toyota Tundra | images/drive/vehicles/toyota-tundra.jpg | https://commons.wikimedia.org/wiki/File:2022_Toyota_Tundra_Limited_CrewMax_Short_Bed_4x4_with_TRD_Off-Road_Package,_front_left,_11-01-2022.jpg | MercurySable99 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| GMC Sierra Denali | images/drive/vehicles/gmc-sierra-denali.jpg | https://commons.wikimedia.org/wiki/File:2024_GMC_Sierra_EV_Denali_front_view.jpg | Deathpallie325 | CC BY-SA 4.0 | oui | contact-sheet | verified |
+| Ford Ranger Raptor | images/drive/vehicles/ford-ranger-raptor.jpg | https://commons.wikimedia.org/wiki/File:2023_Ford_Ranger_Raptor_front.jpg | LuvsMG481 | CC BY-SA 4.0 | oui | contact-sheet | verified |

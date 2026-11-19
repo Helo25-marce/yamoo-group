@@ -1,4 +1,4 @@
-import assert from "node:assert/strict"
+﻿import assert from "node:assert/strict"
 import { createServer } from "vite"
 
 const server = await createServer({
@@ -100,5 +100,40 @@ assert.equal(handed.step, "contact")
 assert.equal(handed.passengers, "1")
 assert.equal(handed.vehicleId, "b")
 assert.equal(handed.error, null)
+
+const browse = search.parseResults(new URLSearchParams(), vehicles)
+assert.equal(browse.query, null)
+assert.equal(browse.errors.length, 0)
+assert.equal(browse.filters.showUnavailable, true)
+const listed = search.listBrowseVehicles(vehicles, browse.filters, { passengers: null, luggage: null }, null, (category) => category)
+assert.deepEqual(listed.map((item) => item.id), ["a", "b", "v"])
+
+const seatsOnly = search.parseResults(new URLSearchParams("passengers=7"), vehicles)
+assert.equal(seatsOnly.query, null)
+assert.equal(seatsOnly.errors.length, 0)
+const seated = search.listBrowseVehicles(
+  vehicles,
+  seatsOnly.filters,
+  search.capacityFilter(seatsOnly.draft),
+  null,
+  (category) => category,
+)
+assert.deepEqual(seated.map((item) => item.id), ["v"])
+
+const rawPassengers = search.parseResults(new URLSearchParams("passengers=abc"), vehicles)
+assert.equal(rawPassengers.draft.passengers, "abc")
+assert.equal(rawPassengers.query, null)
+assert.ok(rawPassengers.errors.includes("drive.err.passengers"))
+
+const near = { id: "near", name: "Near", category: "berline", seats: 4, luggage: 2, available: true, dailyRateFcfa: 200_000, tripRateFcfa: 20_000, demo: true, imageSrc: "" }
+const far = { id: "far", name: "Far", category: "van", seats: 8, luggage: 2, available: true, dailyRateFcfa: 10_000, tripRateFcfa: 20_000, demo: true, imageSrc: "" }
+const recommended = search.listBrowseVehicles(
+  [far, near],
+  { ...filters, sort: "recommended", showUnavailable: true },
+  { passengers: 4, luggage: null },
+  null,
+  (category) => category,
+)
+assert.deepEqual(recommended.map((item) => item.id), ["near", "far"])
 
 console.log("drive search checks OK")

@@ -7,13 +7,15 @@ import { localePath, useLocale } from "../lib/locale"
 import { VehicleCard } from "./VehicleCard"
 import { serviceNeedsRoute } from "./services"
 import { contactIssue } from "./validation"
+import { DateTimeField } from "./ui/DateTimeField"
 import { DriveAlert } from "./ui/DriveAlert"
 import { DriveButton } from "./ui/DriveButton"
+import { PlaceField } from "./ui/PlaceField"
 import { DriveDemoBanner } from "./ui/DriveDemoBanner"
 import { DriveStatusBadge } from "./ui/DriveStatusBadge"
 import { formatFcfa, whatsappDriveLink } from "./format"
 import { calculateDrivePrice } from "./pricing"
-import { criteriaIssue, listMatchingVehicles, resolveWizardEntry, toCriteria, vehicleFit } from "./search"
+import { buildDraftSearch, criteriaIssue, listMatchingVehicles, resolveWizardEntry, toCriteria, vehicleFit } from "./search"
 import { createBooking, listVehicles } from "./store"
 import type { DriveBooking, DriveServiceKind, DriveVehicleCategory } from "./types"
 
@@ -103,7 +105,7 @@ export function BookingWizard() {
     return listMatchingVehicles(
       vehicles,
       criteria,
-      { category: categoryFilter, query: vehicleQuery, showUnavailable, sort: sortKey },
+      { category: categoryFilter, query: vehicleQuery, showUnavailable, sort: sortKey, brand: "", provider: "", priceBand: "" },
       (category) => t(`drive.category.${category}`),
     )
   }, [vehicles, showUnavailable, passengers, luggage, categoryFilter, sortKey, service, vehicleQuery, startAt, endAt, pickup, dropoff, t])
@@ -229,15 +231,9 @@ export function BookingWizard() {
         <section className="mt-6 grid gap-4">
           <h2 className="drive-title-section">{t("drive.step.trip")}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="drive-field">
-              {t("drive.field.start")}
-              <input type="datetime-local" value={startAt} onChange={(event) => setStartAt(event.target.value)} />
-            </label>
+            <DateTimeField dateLabel={t("drive.field.start")} value={startAt} onChange={setStartAt} />
             {service === "chauffeur_daily" ? (
-              <label className="drive-field">
-                {t("drive.field.end")}
-                <input type="datetime-local" value={endAt} onChange={(event) => setEndAt(event.target.value)} />
-              </label>
+              <DateTimeField dateLabel={t("drive.field.end")} value={endAt} onChange={setEndAt} />
             ) : (
               <label className="drive-field">
                 {t("drive.field.passengers")}
@@ -251,14 +247,12 @@ export function BookingWizard() {
           </div>
           {service === "chauffeur_daily" ? (
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="drive-field">
-                {t("drive.field.city")}
-                <input
-                  value={pickup}
-                  onChange={(event) => setPickup(event.target.value)}
-                  placeholder={t("drive.field.cityPlaceholder")}
-                />
-              </label>
+              <PlaceField
+                label={t("drive.field.city")}
+                value={pickup}
+                placeholder={t("drive.place.placeholder")}
+                onChange={setPickup}
+              />
               <label className="drive-field">
                 {t("drive.field.passengers")}
                 <input
@@ -278,22 +272,18 @@ export function BookingWizard() {
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="drive-field">
-                {t("drive.field.pickup")}
-                <input
-                  value={pickup}
-                  onChange={(event) => setPickup(event.target.value)}
-                  placeholder={t("drive.field.pickupPlaceholder")}
-                />
-              </label>
-              <label className="drive-field">
-                {t("drive.field.dropoff")}
-                <input
-                  value={dropoff}
-                  onChange={(event) => setDropoff(event.target.value)}
-                  placeholder={t("drive.field.dropoffPlaceholder")}
-                />
-              </label>
+              <PlaceField
+                label={t("drive.field.pickup")}
+                value={pickup}
+                placeholder={t("drive.place.placeholder")}
+                onChange={setPickup}
+              />
+              <PlaceField
+                label={t("drive.field.dropoff")}
+                value={dropoff}
+                placeholder={t("drive.field.dropoffPlaceholder")}
+                onChange={setDropoff}
+              />
               <label className="drive-field">
                 {t("drive.field.luggage")}
                 <input
@@ -401,6 +391,23 @@ export function BookingWizard() {
                     service={service ?? "chauffeur_daily"}
                     selected={vehicleId === item.id}
                     locale={locale}
+                    sheetHref={
+                      service
+                        ? `${localePath(locale, `/drive/vehicules/${item.id}`)}?${buildDraftSearch(
+                            {
+                              service,
+                              startAt,
+                              endAt: service === "chauffeur_daily" ? endAt : startAt,
+                              pickup,
+                              dropoff,
+                              passengers,
+                              luggage,
+                            },
+                            { category: categoryFilter, query: vehicleQuery, showUnavailable, sort: sortKey, brand: "", provider: "", priceBand: "" },
+                            [],
+                          )}`
+                        : localePath(locale, `/drive/vehicules/${item.id}`)
+                    }
                     onSelect={() => setVehicleId(item.id)}
                   />
                 </li>

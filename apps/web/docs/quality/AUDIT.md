@@ -1,8 +1,8 @@
 # AUDIT qualité — YAMOO
 
-**Dernière mise à jour :** 2026-11-15 (LOT 2 Drive — recherche et résultats)  
-**Gate :** `npm run quality` — **PASS** (38 passed, 7 skipped volontaires)  
-**Détail des lots :** `DRIVE-LOT1.md`, `DRIVE-LOT2.md`  
+**Dernière mise à jour :** 2026-11-15 (LOT 2.5 Drive — catalogue à l'ouverture, non commité)  
+**Gate :** `npm run quality` — **PASS** (40 passed, 8 skipped volontaires)  
+**Détail des lots :** `DRIVE-LOT1.md`, `DRIVE-LOT2.md`, `DRIVE-LOT25.md`, `DRIVE-LOT3.md`  
 **Règle :** un typecheck/build OK ne prouve pas qu’une page est belle.
 
 ---
@@ -114,3 +114,5 @@ Inchangé fonctionnellement. Tokens CSS `.ui-institutional` sur le layout.
 | 2026-11-15 | **LOT 1** sur `feature/drive-foundations` : tokens, 4 composants UI, validation extraite, images démo. Gate **35 passed / 4 skipped**. Non déployé. |
 | 2026-11-15 | **LOT 2** local, non commité : recherche, `/drive/resultats`, filtres, tri, comparaison, passage wizard. Gate **38 passed / 7 skipped**. Non poussé. |
 | 2026-11-15 | Clôture LOT 2 : un passager ou un bagage illisible n'est plus remplacé. Le comparateur défile dans son cadre à 375 et 390. |
+| 2026-11-15 | **LOT 3** local, non commité : fiche `/:lang/drive/vehicules/:vehicleId`, galerie démo, récapitulatif recalculé. Non poussé. |
+| 2026-11-15 | **LOT 2.5** local, non commité : `/drive` ouvre le catalogue. Le wizard est sur `/drive/reservation`. Gate **40 passed / 8 skipped**. Non poussé. |
