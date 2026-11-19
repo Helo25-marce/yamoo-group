@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { Bus, Car, CarFront, Gem, Sparkles, Truck } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import { Bus, Car, CarFront, Gem, Truck } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router"
 import { VehicleCard } from "../VehicleCard"
@@ -30,7 +30,7 @@ import { findPlace } from "../places"
 import { DriveSearchForm } from "./DriveSearchForm"
 import { PlaceMap } from "./PlaceMap"
 import { FacetSection, PendingFacets, type FacetOption } from "./DriveFacets"
-import { COMPARE_MAX, CompareBar, ComparePanel } from "./SmartCompare"
+import { COMPARE_MAX } from "./SmartCompare"
 import {
   CATEGORY_TARGETS,
   FACET_FAMILIES,
@@ -86,12 +86,6 @@ export function DriveCatalog({ path }: Props) {
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState("")
   const [limit, setLimit] = useState(PAGE_SIZE)
-  const [smartOn, setSmartOn] = useState(parsed.compare.length > 0)
-  const [panelOpen, setPanelOpen] = useState(false)
-  const closePanel = useCallback(() => setPanelOpen(false), [])
-  useEffect(() => {
-    if (parsed.compare.length > 0) setSmartOn(true)
-  }, [parsed.compare.length])
 
   const searchKey = params.toString()
   useEffect(() => {
@@ -322,44 +316,6 @@ export function DriveCatalog({ path }: Props) {
     )
   })
 
-  type Chip = { id: string; label: string; onRemove: () => void }
-  const chips: Chip[] = [
-    ...selectedCategories.map((category) => ({
-      id: `cat-${category}`,
-      label: label(category as DriveVehicleCategory),
-      onRemove: () => {
-        const next = selectedCategories.filter((item) => item !== category)
-        updateFilters({ category: next.length > 0 ? next.join(",") : "all" })
-      },
-    })),
-    ...(parsed.filters.brand ? [{ id: "brand", label: parsed.filters.brand, onRemove: () => updateFilters({ brand: "" }) }] : []),
-    ...selectedProviders.map((id) => ({
-      id: `provider-${id}`,
-      label: partners.find((partner) => partner.id === id)?.name ?? id,
-      onRemove: () => updateFilters({ provider: selectedProviders.filter((item) => item !== id).join(",") }),
-    })),
-    ...(parsed.filters.priceBand
-      ? [{ id: "band", label: t(`drive.results.band.${parsed.filters.priceBand}`), onRemove: () => updateFilters({ priceBand: "" }) }]
-      : []),
-    ...FACET_FAMILIES.flatMap((family) =>
-      (facets[family.key] ?? []).map((option) => ({
-        id: `${family.key}-${option}`,
-        label: `${t(`drive.f.title.${family.key}`)} : ${optionLabel(family.key, option)}`,
-        onRemove: () => setFacets(toggleOption(facets, family.key, option)),
-      })),
-    ),
-    ...(parsed.filters.query ? [{ id: "q", label: parsed.filters.query, onRemove: () => updateFilters({ query: "" }) }] : []),
-    ...((criteria ? criteria.passengers > 1 : capacity.passengers !== null && capacity.passengers > 1)
-      ? [{ id: "seats", label: `${criteria ? criteria.passengers : capacity.passengers} ${t("drive.seats")}`, onRemove: () => setCapacity("passengers", criteria ? "1" : "") }]
-      : []),
-    ...((criteria ? criteria.luggage > 0 : capacity.luggage !== null && capacity.luggage > 0)
-      ? [{ id: "bags", label: `${criteria ? criteria.luggage : capacity.luggage} ${t("drive.luggage")}`, onRemove: () => setCapacity("luggage", "0") }]
-      : []),
-    ...(parsed.filters.showUnavailable && criteria
-      ? [{ id: "unavailable", label: t("drive.filter.showUnavailable"), onRemove: () => updateFilters({ showUnavailable: false }) }]
-      : []),
-  ]
-
   function resetAll() {
     if (criteria) {
       go(buildResultsSearch({
@@ -374,7 +330,6 @@ export function DriveCatalog({ path }: Props) {
     go(url.toString())
   }
 
-  const compareContext = { criteria, partners, locale }
 
   const message = notice || (parsed.errors[0] ? t(parsed.errors[0]) : parsed.warnings[0] ? t(parsed.warnings[0]) : "")
   const knownPlace = findPlace(criteria?.pickup || draft.pickup)
@@ -525,7 +480,7 @@ export function DriveCatalog({ path }: Props) {
             <div className="flex flex-wrap gap-2">
               {parsed.filters.category !== "all" ? (
                 <button type="button" className="drive-chip is-selected rounded-full px-3 py-1.5 text-xs" onClick={() => updateFilters({ category: "all" })}>
-                  {label(parsed.filters.category)} · {t("drive.results.remove")}
+                  {label(parsed.filters.category as DriveVehicleCategory)} · {t("drive.results.remove")}
                 </button>
               ) : null}
               {parsed.filters.brand ? (
@@ -668,25 +623,6 @@ export function DriveCatalog({ path }: Props) {
         </div>
       </div>
     </div>
-  )
-}
-
-function FacetGroup({ legend, children }: { legend: string; children: ReactNode }) {
-  const { t } = useTranslation()
-  const [open, setOpen] = useState(false)
-  const items = (Array.isArray(children) ? children : [children]).filter(Boolean)
-  if (items.length === 0) return null
-  const visible = open || items.length <= 6 ? items : items.slice(0, 6)
-  return (
-    <fieldset className="drive-facet">
-      <legend>{legend}</legend>
-      {visible}
-      {items.length > 6 ? (
-        <button type="button" className="drive-text-link drive-facet-more" onClick={() => setOpen((value) => !value)}>
-          {open ? t("drive.filter.showLess") : t("drive.filter.showMore")}
-        </button>
-      ) : null}
-    </fieldset>
   )
 }
 
